@@ -17,8 +17,7 @@ function Home() {
   const [emberWatchers, setEmberWatchers] = useState();
   const [vueStargazers, setVueStargazers] = useState();
   const [vueWatchers, setVueWatchers] = useState();
-
-
+  const [vueTotalCommits, setVueTotalCommits] = useState();
 
   useEffect(() => {
     axios
@@ -30,9 +29,11 @@ function Home() {
         axios.get("https://api.github.com/repos/emberjs/ember.js", {
           headers: { Accept: "application/vnd.github.v3+json" }}),
         axios.get("https://api.github.com/repos/vuejs/vue", {
+          headers: { Accept: "application/vnd.github.v3+json" }}),
+        axios.get("https://api.github.com/repos/vuejs/vue/contributors?page=1&per_page=100", {
           headers: { Accept: "application/vnd.github.v3+json" }})
       ])
-      .then(axios.spread((reactStats, angularStats, emberStats, vueStats) => {
+      .then(axios.spread((reactStats, angularStats, emberStats, vueStats, vueCommits) => {
         setReactStargazers(reactStats.data.stargazers_count)
         setAngularStargazers(angularStats.data.stargazers_count)
         setEmberStargazers(emberStats.data.stargazers_count)
@@ -41,8 +42,22 @@ function Home() {
         setAngularWatchers(angularStats.data.watchers_count)
         setEmberWatchers(emberStats.data.watchers_count)
         setVueWatchers(vueStats.data.watchers_count)
+        setVueTotalCommits(vueCommits.data)
       }))
-  })    
+  }, [])    
+
+  var contributionsArray = []
+  const vueCommitSummer = () => {
+    console.log("I GOT CLICKED")
+    let sum = 0
+    for(let i = 0; i < vueTotalCommits.length; i++) {
+      sum += vueTotalCommits[i].contributions
+      console.log(sum)
+    }
+    console.log("This is final sum")
+    console.log(sum)
+  }
+
   return (
     <div>
       <Table>
@@ -56,13 +71,13 @@ function Home() {
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableRow>
+          {/* <TableRow>
             <TableCell> Stargazers </TableCell>
             <TableCell> {reactStargazers} </TableCell>
             <TableCell> {angularStargazers} </TableCell>
             <TableCell> {emberStargazers} </TableCell>
             <TableCell> {vueStargazers} </TableCell>
-          </TableRow>
+          </TableRow> */}
           <TableRow>
             <TableCell> Watchers </TableCell>
             <TableCell> {reactWatchers} </TableCell>
@@ -91,7 +106,7 @@ function Home() {
             <TableCell> {emberWatchers} </TableCell>
             <TableCell> {vueWatchers} </TableCell>
           </TableRow>
-          <TableRow>
+          {/* <TableRow>
             <TableCell> Pull Requests </TableCell>
             <TableCell> {reactWatchers} </TableCell>
             <TableCell> {angularWatchers} </TableCell>
@@ -104,9 +119,10 @@ function Home() {
             <TableCell> {angularWatchers} </TableCell>
             <TableCell> {emberWatchers} </TableCell>
             <TableCell> {vueWatchers} </TableCell>
-          </TableRow>
+          </TableRow> */}
         </TableBody>
       </Table>
+      <button onClick={vueCommitSummer}> +++ </button>
     </div>
   );
 }
