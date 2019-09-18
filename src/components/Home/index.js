@@ -13,32 +13,38 @@ function Home() {
   const [reactWatchers, setReactWatchers] = useState();
   const [angularStargazers, setAngularStargazers] = useState();
   const [angularWatchers, setAngularWatchers] = useState();
+  const [emberStargazers, setEmberStargazers] = useState();
+  const [emberWatchers, setEmberWatchers] = useState();
+  const [vueStargazers, setVueStargazers] = useState();
+  const [vueWatchers, setVueWatchers] = useState();
+
+
 
   useEffect(() => {
     axios
-      .get("https://api.github.com/repos/facebook/react", {
-        headers: { Accept: "application/vnd.github.v3+json" }
-      })
-      .then(response => {
-        setReactStargazers(response.data.stargazers_count);
-        setReactWatchers(response.data.watchers);
-      });
-  });
-
-  useEffect(() => {
-    axios
-      .get("https://api.github.com/repos/angular/angular.js", {
-        headers: { Accept: "application/vnd.github.v3+json" }
-      })
-      .then(response => {
-        setAngularStargazers(response.data.stargazers_count);
-        setAngularWatchers(response.data.watchers);
-      });
-  });
-
+      .all([
+        axios.get("https://api.github.com/repos/facebook/react", {
+          headers: { Accept: "application/vnd.github.v3+json" }}),
+        axios.get("https://api.github.com/repos/angular/angular.js", {
+          headers: { Accept: "application/vnd.github.v3+json" }}),
+        axios.get("https://api.github.com/repos/emberjs/ember.js", {
+          headers: { Accept: "application/vnd.github.v3+json" }}),
+        axios.get("https://api.github.com/repos/vuejs/vue", {
+          headers: { Accept: "application/vnd.github.v3+json" }})
+      ])
+      .then(axios.spread((reactStats, angularStats, emberStats, vueStats) => {
+        setReactStargazers(reactStats.data.stargazers_count)
+        setAngularStargazers(angularStats.data.stargazers_count)
+        setEmberStargazers(emberStats.data.stargazers_count)
+        setVueStargazers(vueStats.data.stargazers_count)
+        setReactWatchers(reactStats.data.watchers_count)
+        setAngularWatchers(angularStats.data.watchers_count)
+        setEmberWatchers(emberStats.data.watchers_count)
+        setVueWatchers(vueStats.data.watchers_count)
+      }))
+  })    
   return (
     <div>
-      Hey there
       <Table>
         <TableHead>
           <TableRow>
@@ -54,11 +60,50 @@ function Home() {
             <TableCell> Stargazers </TableCell>
             <TableCell> {reactStargazers} </TableCell>
             <TableCell> {angularStargazers} </TableCell>
+            <TableCell> {emberStargazers} </TableCell>
+            <TableCell> {vueStargazers} </TableCell>
           </TableRow>
           <TableRow>
             <TableCell> Watchers </TableCell>
             <TableCell> {reactWatchers} </TableCell>
             <TableCell> {angularWatchers} </TableCell>
+            <TableCell> {emberWatchers} </TableCell>
+            <TableCell> {vueWatchers} </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell> Stars </TableCell>
+            <TableCell> {reactWatchers} </TableCell>
+            <TableCell> {angularWatchers} </TableCell>
+            <TableCell> {emberWatchers} </TableCell>
+            <TableCell> {vueWatchers} </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell> Forks </TableCell>
+            <TableCell> {reactWatchers} </TableCell>
+            <TableCell> {angularWatchers} </TableCell>
+            <TableCell> {emberWatchers} </TableCell>
+            <TableCell> {vueWatchers} </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell> Commits </TableCell>
+            <TableCell> {reactWatchers} </TableCell>
+            <TableCell> {angularWatchers} </TableCell>
+            <TableCell> {emberWatchers} </TableCell>
+            <TableCell> {vueWatchers} </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell> Pull Requests </TableCell>
+            <TableCell> {reactWatchers} </TableCell>
+            <TableCell> {angularWatchers} </TableCell>
+            <TableCell> {emberWatchers} </TableCell>
+            <TableCell> {vueWatchers} </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell> Issues </TableCell>
+            <TableCell> {reactWatchers} </TableCell>
+            <TableCell> {angularWatchers} </TableCell>
+            <TableCell> {emberWatchers} </TableCell>
+            <TableCell> {vueWatchers} </TableCell>
           </TableRow>
         </TableBody>
       </Table>

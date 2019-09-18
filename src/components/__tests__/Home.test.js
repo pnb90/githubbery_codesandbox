@@ -8,8 +8,8 @@ describe('Home page component', () => {
   //  expect(asFragment()).toMatchSnapshot()
   // })
 
-  // it("matches snapshot", () => {
-  //  const { asFragment } = render(<Home />)
+  // it("has a value for the watchers for React", () => {
+  //  const { getByText } = render(<Home />)
   //  expect(asFragment()).toMatchSnapshot()
   // })
 
